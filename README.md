@@ -11,7 +11,7 @@
 ## Setting up your TradeTracker.com Tag
 
 1. Download the the .zip of this repository, create a new template in Google Tag Manager and import the template.tpl file using the overflow menu at the top right
-1. Search for the TradeTracker.com Conversion tag and select it
+1. Add a new tag, search for the TradeTracker.com Conversion tag custom template and select it
 1. Add your Campaign Id as text or enter the variable name
 1. Add your Product Id as text or enter the variable name
 1. Enter the variable name for your Transaction (Order) Id variable
