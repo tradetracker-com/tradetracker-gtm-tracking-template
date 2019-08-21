@@ -1,5 +1,7 @@
 # TradeTracker.com Conversion Google Tag Manager Template
 
+This tag template makes it easy to add TradeTracker.com's conversion pixel to your Google Tag Manager container. If you have any questions or need any assistance please contact your Account Manager.
+
 ## Before setting up your TradeTracker.com Tag
 
 * Make sure you have either dataLayer variables, or javascript-macro variables configured for transactions
