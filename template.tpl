@@ -1,8 +1,8 @@
 ﻿___INFO___
 
 {
-  "displayName": "TradeTracker.com Conversion",
-  "description": "TradeTracker.com Sales Conversion Tag",
+  "displayName": "TradeTracker.com",
+  "description": "TradeTracker.com Conversion and Leads Tracking Tag",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
@@ -22,6 +22,24 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "displayValue": "Conversion Tag",
+        "value": "sale"
+      },
+      {
+        "displayValue": "Leads Tag",
+        "value": "lead"
+      }
+    ],
+    "displayName": "Tag Type",
+    "simpleValueType": true,
+    "name": "tagType",
+    "type": "SELECT",
+    "help": "Please select whether this tag should track sales conversion events (retail orders), or if it should track leads events. Leads can be visitor actions such as newsletter signups or demo requests."
+  },
+  {
     "help": "Please enter your TradeTracker.com Campaign Id. If you run multiple campaigns please ensure it is the correct Id. If you're unsure please  check in your Advertiser Dashboard or contact your Account Manager for assistance.",
     "displayName": "Campaign Id",
     "simpleValueType": true,
@@ -36,14 +54,21 @@ ___TEMPLATE_PARAMETERS___
     "type": "TEXT"
   },
   {
-    "help": "Please select the eCommerce dataLayer variable for the Transaction (Order) Id.",
+    "help": "Please select the dataLayer variable for the Transaction or Order Id. For the conversion tag this should be the same Id that you use to track sales internally, and it should be unique for every transaction.",
     "displayName": "Transaction Id",
     "simpleValueType": true,
     "name": "orderID",
     "type": "TEXT"
   },
   {
-    "help": "Please select the eCommerce dataLayer variable for the Total Transaction (Order) Amount excluding any applicable tax.",
+    "help": "Please select the dataLayer variable for the Total Transaction (Order) Amount excluding any applicable tax.",
+    "enablingConditions": [
+      {
+        "paramName": "tagType",
+        "type": "EQUALS",
+        "paramValue": "sale"
+      }
+    ],
     "displayName": "Transaction Amount",
     "simpleValueType": true,
     "name": "orderAmount",
@@ -84,10 +109,18 @@ ___WEB_PERMISSIONS___
   {
     "instance": {
       "key": {
-        "publicId": "inject_script",
+        "publicId": "logging",
         "versionId": "1"
       },
-      "param": []
+      "param": [
+        {
+          "key": "environments",
+          "value": {
+            "type": 1,
+            "string": "debug"
+          }
+        }
+      ]
     },
     "isRequired": true
   }
@@ -98,18 +131,32 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 // Enter your template code here.
 const encodeUriComponent = require('encodeUriComponent');
-const injectScript = require('injectScript');
 const query = require('queryPermission');
-const campaignId = data.campaignID || '';
+const log = require('logToConsole');
 const sendPixel = require('sendPixel');
-const imgUrl = 'https://ts.tradetracker.net/?cid='+data.campaignID+'&amp;pid='+data.productID+'&amp;tid='+data.orderID+'&amp;tam='+data.orderAmount+'&amp;data=&amp;qty=1&amp;descrMerchant=&amp;descrAffiliate=&amp;event=sales&amp;currency=EUR&amp;vc="';
+const campaignID = data.hasOwnProperty('campaignID') ? '' + data.campaignID : '';
+const productID = data.hasOwnProperty('productID') ? '' + data.productID : '';
+const orderID = data.hasOwnProperty('orderID') ? '' + data.orderID : '';
+const orderAmount = data.hasOwnProperty('orderAmount') ? '' + data.orderAmount : '';
+const domain = data.tagType === 'sale' ? 'ts.tradetracker.net' : 'tl.tradetracker.net';
+let imgUrl = 'https://' + domain + '/?cid=' + encodeUriComponent(campaignID) + '&pid=' + encodeUriComponent(productID) + '&tid=' + encodeUriComponent(orderID)+ '&data=&descrMerchant=&descrAffiliate=';
+if (data.tagType === 'sale') {
+  imgUrl += '&tam=' + encodeUriComponent(orderAmount) + '&event=sales&qty=1&currency=EUR&vc=';  
+} else {
+  imgUrl += '&event=lead';
+}
+
+log(imgUrl);
 
 // Call data.gtmOnSuccess when the tag is finished.
 if (query('send_pixel', imgUrl)) {
+  log('pixel sent');
   sendPixel(imgUrl, data.gtmOnSuccess, data.gtmOnFailure);
+} else {
+  log('pixel not sent');
 }
 
 
 ___NOTES___
 
-Created on 21/08/2019, 12:25:32
+Created on 29/08/2019, 16:10:24

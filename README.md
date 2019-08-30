@@ -14,9 +14,10 @@ This tag template makes it easy to add TradeTracker.com's conversion pixel to yo
 
 1. Download the the .zip of this repository, create a new template in Google Tag Manager and import the template.tpl file using the overflow menu at the top right
 1. Add a new tag, search for the TradeTracker.com Conversion tag custom template and select it
+1. Select a Tag Type from the drop-down menu
 1. Add your Campaign Id as text or enter the variable name
 1. Add your Product Id as text or enter the variable name
 1. Enter the variable name for your Transaction (Order) Id variable
-1. Enter the variable name for your Transaction (Order) Amount variable
+1. Enter the variable name for your Transaction (Order) Amount variable ('Conversion' tag type only)
 1. Select the correct firing trigger for the tag
 1. Save
