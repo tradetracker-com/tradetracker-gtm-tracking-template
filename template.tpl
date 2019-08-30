@@ -132,7 +132,6 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 // Enter your template code here.
 const encodeUriComponent = require('encodeUriComponent');
 const query = require('queryPermission');
-const log = require('logToConsole');
 const sendPixel = require('sendPixel');
 const campaignID = data.hasOwnProperty('campaignID') ? '' + data.campaignID : '';
 const productID = data.hasOwnProperty('productID') ? '' + data.productID : '';
@@ -146,14 +145,9 @@ if (data.tagType === 'sale') {
   imgUrl += '&event=lead';
 }
 
-log(imgUrl);
-
 // Call data.gtmOnSuccess when the tag is finished.
 if (query('send_pixel', imgUrl)) {
-  log('pixel sent');
   sendPixel(imgUrl, data.gtmOnSuccess, data.gtmOnFailure);
-} else {
-  log('pixel not sent');
 }
 
 
