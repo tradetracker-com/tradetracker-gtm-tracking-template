@@ -2,7 +2,7 @@
 
 {
   "displayName": "TradeTracker.com",
-  "description": "TradeTracker.com Conversion and Leads Tracking Tag",
+  "description": "TradeTracker.com Sales and Leads Tracking Tag",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
@@ -25,7 +25,7 @@ ___TEMPLATE_PARAMETERS___
     "macrosInSelect": false,
     "selectItems": [
       {
-        "displayValue": "Conversion Tag",
+        "displayValue": "Sales Tag",
         "value": "sale"
       },
       {
@@ -40,15 +40,15 @@ ___TEMPLATE_PARAMETERS___
     "help": "Please select whether this tag should track sales conversion events (retail orders), or if it should track leads events. Leads can be visitor actions such as newsletter signups or demo requests."
   },
   {
-    "help": "Please enter your TradeTracker.com Campaign Id. If you run multiple campaigns please ensure it is the correct Id. If you're unsure please  check in your Advertiser Dashboard or contact your Account Manager for assistance.",
-    "displayName": "Campaign Id",
+    "help": "Please enter your TradeTracker.com Campaign ID. If you run multiple campaigns please ensure it is the correct Id. If you're unsure please  check in your Advertiser Dashboard or contact your Account Manager for assistance.",
+    "displayName": "Campaign ID",
     "simpleValueType": true,
     "name": "campaignID",
     "type": "TEXT"
   },
   {
-    "help": "Please enter your TradeTracker.com Product Id. Please note that this tag configuration cannot support multi-product campaigns. If you're unsure please check in your Advertiser Dashboard or contact your Account Manager for assistance.",
-    "displayName": "Product Id",
+    "help": "Please enter your TradeTracker.com Product ID. Please note that this tag configuration cannot support multi-product campaigns. If you're unsure please check in your Advertiser Dashboard or contact your Account Manager for assistance.",
+    "displayName": "Product ID",
     "simpleValueType": true,
     "name": "productID",
     "type": "TEXT"
