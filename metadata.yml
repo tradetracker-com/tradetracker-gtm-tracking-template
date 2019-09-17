@@ -1,0 +1,5 @@
+homepage: "https://tradetracker.com",
+documentation: "https://github.com/tradetracker-com/tradetracker-gtm-tracking-template/blob/master/README.md",
+versions:
+  - sha: f1a0335
+    changeNotes: Initial Version

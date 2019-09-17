@@ -2,7 +2,7 @@
 
 {
   "displayName": "TradeTracker.com",
-  "description": "TradeTracker.com Sales and Leads Tracking Tag",
+  "description": "TradeTracker.com Sales and Leads Tracking Tag. \n\nThis tag will allow you to generate sales (transactions) or custom leads events that will be tracked on your TradeTracker.com campaign.",
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
@@ -22,6 +22,7 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
+    "help": "Please select whether this tag should track sales events (retail orders and transactions), or if it should track leads events. Leads can be any custom visitor actions such as newsletter signups or demo requests.",
     "macrosInSelect": false,
     "selectItems": [
       {
@@ -36,32 +37,31 @@ ___TEMPLATE_PARAMETERS___
     "displayName": "Tag Type",
     "simpleValueType": true,
     "name": "tagType",
-    "type": "SELECT",
-    "help": "Please select whether this tag should track sales conversion events (retail orders), or if it should track leads events. Leads can be visitor actions such as newsletter signups or demo requests."
+    "type": "SELECT"
   },
   {
-    "help": "Please enter your TradeTracker.com Campaign ID. If you run multiple campaigns please ensure it is the correct Id. If you're unsure please  check in your Advertiser Dashboard or contact your Account Manager for assistance.",
-    "displayName": "Campaign ID",
+    "help": "Please enter your TradeTracker.com Campaign Id, or a variable that will return this value. If you run multiple campaigns please ensure it is the correct Id.</br></br>If you're unsure of what number to use, please  check in your Advertiser Dashboard or contact your Account Manager for assistance.",
+    "displayName": "Campaign Id",
     "simpleValueType": true,
     "name": "campaignID",
     "type": "TEXT"
   },
   {
-    "help": "Please enter your TradeTracker.com Product ID. Please note that this tag configuration cannot support multi-product campaigns. If you're unsure please check in your Advertiser Dashboard or contact your Account Manager for assistance.",
-    "displayName": "Product ID",
+    "help": "Please enter your TradeTracker.com Product Group ID, or a variable that contains this value.</br></br> If you're unsure about what number to use, please check in your Advertiser Dashboard or contact your Account Manager for assistance.</br></br> <em>Please note that this tag configuration cannot support multi-product group campaigns at this time.</em>",
+    "displayName": "Product Group Id",
     "simpleValueType": true,
     "name": "productID",
     "type": "TEXT"
   },
   {
-    "help": "Please select the dataLayer variable for the Transaction or Order Id. For the conversion tag this should be the same Id that you use to track sales internally, and it should be unique for every transaction.",
+    "help": "Please select the dataLayer variable for your Transaction or Order Id.</br></br>For the Sales tag this should be the same Id that you use to track sales internally, and it should be unique for every transaction.</br></br>For the Leads tag the Transaction Id can be any number you chose but also must be unique.",
     "displayName": "Transaction Id",
     "simpleValueType": true,
     "name": "orderID",
     "type": "TEXT"
   },
   {
-    "help": "Please select the dataLayer variable for the Total Transaction (Order) Amount excluding any applicable tax.",
+    "help": "Please select the dataLayer variable for the Total Transaction (Order) Amount <strong>excluding any applicable tax</strong>.</br></br>This should be formatted as a string currency amount, for example $1,234.56 should be formatted as \"1234.56\".",
     "enablingConditions": [
       {
         "paramName": "tagType",
@@ -103,24 +103,6 @@ ___WEB_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
-    },
-    "isRequired": true
-  },
-  {
-    "instance": {
-      "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "debug"
-          }
-        }
-      ]
     },
     "isRequired": true
   }
