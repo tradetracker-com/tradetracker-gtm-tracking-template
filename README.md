@@ -81,7 +81,7 @@ If you are tracking an even that does not have an inbuilt Id, you could create a
 
 ```javascript
 function () {
-  return new Date.now() + Math.random() 
+  return Date.now() + Math.random() 
 }
 ```
 
