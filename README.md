@@ -75,9 +75,9 @@ Alternatively if you need to create a trigger based on the thank-you page url or
 If you want to track custom leads events such as email signups or demo requests, you will need to create some custom variables to provide to the TradeTracker.com tag. Due to the highly customizable nature of these events, we cannot offer as much advice as we can for the sales tag, but we do have a few guidelines.
 
 ### Transaction ID: 
-The Leads tag still requires a Transaction Id. In this case the transaction id tracks a unique user event on your website. If this will track something like email signups where an Id is returned from the submitted form, you could provide this Id so that these leads events can be matched from TradeTrackers tracking to your own analytics. 
+The Leads tag still requires a Transaction Id. In this case the transaction id tracks a unique user event on your website. If this will track something like email signups where an id is returned from the submitted form, you could provide this id so that these leads events can be matched from TradeTracker.com's tracking to your own analytics. 
 
-If you are tracking an even that does not have an inbuilt Id, you could create a unique identifier for events by combining a random number and a timestamp in a GTM Custom JavaScript variable. For example: 
+If you are tracking an event that does not have an provide it's own id, you could create a unique identifier for events by combining a random number and a timestamp in a GTM Custom JavaScript variable. For example:  
 
 ```javascript
 function () {
