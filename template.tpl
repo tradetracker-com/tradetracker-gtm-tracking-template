@@ -1,8 +1,16 @@
-﻿___INFO___
+﻿___TERMS_OF_SERVICE___
+
+By creating or modifying this file you agree to Google Tag Manager's Community
+Template Gallery Developer Terms of Service available at
+https://developers.google.com/tag-manager/gallery-tos (or such other URL as
+Google may provide), as modified from time to time.
+
+___INFO___
 
 {
   "displayName": "TradeTracker.com",
   "description": "TradeTracker.com Sales and Leads Tracking Tag. \n\nThis tag will allow you to generate sales (transactions) or custom leads events that will be tracked on your TradeTracker.com campaign.",
+  "categories": ["AFFILIATE_MARKETING", "MARKETING", "ATTRIBUTION"],
   "securityGroups": [],
   "id": "cvt_temp_public_id",
   "type": "TAG",
