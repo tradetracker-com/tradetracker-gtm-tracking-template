@@ -48,22 +48,22 @@ ___TEMPLATE_PARAMETERS___
     "type": "SELECT"
   },
   {
-    "help": "Please enter your TradeTracker.com Campaign Id, or a variable that will return this value. If you run multiple campaigns please ensure it is the correct Id.</br></br>If you're unsure of what number to use, please  check in your Advertiser Dashboard or contact your Account Manager for assistance.",
-    "displayName": "Campaign Id",
+    "help": "Please enter your TradeTracker.com Campaign ID, or a variable that will return this value. If you run multiple campaigns please ensure it is the correct Id.</br></br>If you're unsure of what number to use, please  check in your Advertiser Dashboard or contact your Account Manager for assistance.",
+    "displayName": "Campaign ID",
     "simpleValueType": true,
     "name": "campaignID",
     "type": "TEXT"
   },
   {
-    "help": "Please enter your TradeTracker.com Product Group ID, or a variable that contains this value.</br></br> If you're unsure about what number to use, please check in your Advertiser Dashboard or contact your Account Manager for assistance.</br></br> <em>Please note that this tag configuration cannot support multi-product group campaigns at this time.</em>",
-    "displayName": "Product Group Id",
+    "help": "Please enter your TradeTracker.com Product ID, or a variable that contains this value.</br></br> If you're unsure about what number to use, please check in your Advertiser Dashboard or contact your Account Manager for assistance.</br></br> <em>Please note that this tag configuration cannot support multi-product group campaigns at this time.</em>",
+    "displayName": "Product ID",
     "simpleValueType": true,
     "name": "productID",
     "type": "TEXT"
   },
   {
     "help": "Please select the dataLayer variable for your Transaction or Order Id.</br></br>For the Sales tag this should be the same Id that you use to track sales internally, and it should be unique for every transaction.</br></br>For the Leads tag the Transaction Id can be any number you choose but also must be unique for each event.",
-    "displayName": "Transaction Id",
+    "displayName": "Transaction ID",
     "simpleValueType": true,
     "name": "orderID",
     "type": "TEXT"
