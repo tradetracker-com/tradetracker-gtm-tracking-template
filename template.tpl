@@ -9,7 +9,7 @@ ___INFO___
 
 {
   "displayName": "TradeTracker.com",
-  "description": "TradeTracker.com Sales and Leads Tracking Tag. \n\nThis tag will allow you to generate sales (transactions) or custom leads events that will be tracked on your TradeTracker.com campaign.",
+  "description": "TradeTracker.com Sales and Leads Tracking Tag. \n\nThis tag will allow you to generate sale (transactions) events or custom lead events that will be tracked on your TradeTracker.com campaign.",
   "categories": ["AFFILIATE_MARKETING", "MARKETING", "ATTRIBUTION"],
   "securityGroups": [],
   "id": "cvt_temp_public_id",
@@ -30,7 +30,7 @@ ___TEMPLATE_PARAMETERS___
 
 [
   {
-    "help": "Please select whether this tag should track sales events (retail orders and transactions), or if it should track leads events. Leads can be any custom visitor actions such as newsletter signups or demo requests.",
+    "help": "Please select whether this tag should track sale events (retail orders and transactions), or if it should track lead events. Leads can be any custom visitor actions such as newsletter signups or demo requests.",
     "macrosInSelect": false,
     "selectItems": [
       {
@@ -62,7 +62,7 @@ ___TEMPLATE_PARAMETERS___
     "type": "TEXT"
   },
   {
-    "help": "Please select the dataLayer variable for your Transaction or Order Id.</br></br>For the Sales tag this should be the same Id that you use to track sales internally, and it should be unique for every transaction.</br></br>For the Leads tag the Transaction Id can be any number you chose but also must be unique.",
+    "help": "Please select the dataLayer variable for your Transaction or Order Id.</br></br>For the Sales tag this should be the same Id that you use to track sales internally, and it should be unique for every transaction.</br></br>For the Leads tag the Transaction Id can be any number you choose but also must be unique for each event.",
     "displayName": "Transaction Id",
     "simpleValueType": true,
     "name": "orderID",
