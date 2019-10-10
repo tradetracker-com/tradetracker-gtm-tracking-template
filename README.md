@@ -21,6 +21,7 @@ This tag template makes it easy for advertisers to add TradeTracker.com's conver
 1. Add your ProductGroup Id as text or enter the variable name
 1. Enter the variable name for your Transaction  Id variable
 1. Enter the variable name for your Transaction Amount variable ('Sales' tag type only)
+1. Enter the currency code that transactions on your website will be made in
 1. Select the correct firing trigger for the tag
 1. Save the tag
 
@@ -60,6 +61,10 @@ function () {
   return ({{your_transaction_revenue_variable}} - {{your_transaction_tax_variable}}).toFixed(2)
 }
 ```
+
+### Currency:
+This variable should capture the currency code that your transactions on your website are made in. If this will always be the same you can just type in the three letter [ISO 4217 currency code](https://en.wikipedia.org/wiki/ISO_4217#Active_codes). If it will vary, you may need to create a custom variable that will capture this transaction currency and provide it to the tag.
+
 
 ### Purchase Trigger:
 This GTM Trigger should be set to fire either when a "purchase" event is pushed to the dataLayer, or to match the url of your post-purchase "thank-you" page and fire the tag there. 
