@@ -2,7 +2,7 @@ homepage: "https://tradetracker.com",
 documentation: "https://github.com/tradetracker-com/tradetracker-gtm-tracking-template/blob/master/Guide_International.pdf",
 versions:
   # Latest version
-  - sha: 
+  - sha: 6efe8ebcdae0607d75551d8165ca5223409ca5fd
     changeNotes: Added currency field
   #Older versions
   - sha: 83bdb2aadae0abb394e7676766334434666583d1
