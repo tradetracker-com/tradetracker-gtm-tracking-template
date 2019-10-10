@@ -81,6 +81,14 @@ ___TEMPLATE_PARAMETERS___
     "simpleValueType": true,
     "name": "orderAmount",
     "type": "TEXT"
+  },
+  {
+    "type": "TEXT",
+    "name": "currency",
+    "displayName": "Currency",
+    "simpleValueType": true,
+    "help": "Please enter the 3 letter currency code (\"USD\", \"EUR\" etc) for the currency that transactions on your website will be made in.",
+    "defaultValue": "EUR"
   }
 ]
 
@@ -127,10 +135,11 @@ const campaignID = data.hasOwnProperty('campaignID') ? '' + data.campaignID : ''
 const productID = data.hasOwnProperty('productID') ? '' + data.productID : '';
 const orderID = data.hasOwnProperty('orderID') ? '' + data.orderID : '';
 const orderAmount = data.hasOwnProperty('orderAmount') ? '' + data.orderAmount : '';
+const currency = data.hasOwnProperty('currency') ? '' + data.currency : '';
 const domain = data.tagType === 'sale' ? 'ts.tradetracker.net' : 'tl.tradetracker.net';
 let imgUrl = 'https://' + domain + '/?cid=' + encodeUriComponent(campaignID) + '&pid=' + encodeUriComponent(productID) + '&tid=' + encodeUriComponent(orderID)+ '&data=&descrMerchant=&descrAffiliate=';
 if (data.tagType === 'sale') {
-  imgUrl += '&tam=' + encodeUriComponent(orderAmount) + '&event=sales&qty=1&currency=EUR&vc=';  
+  imgUrl += '&tam=' + encodeUriComponent(orderAmount) + '&event=sales&qty=1&currency=' + currency + '&vc=';
 } else {
   imgUrl += '&event=lead';
 }
