@@ -70,14 +70,13 @@ This variable should capture the currency code that your transactions on your we
 These variables are not required. The tag will work without configuring these fields. However it is recommended that you complete this part of the configuration to ensure that you get the most out of your TradeTracker.com campaigns.
 
 #### Voucher Code:
-Please add a variable for the voucher code used on the checkout page of your webshop.Voucher codes should be formatted as a string, such as "DISCOUNT10"
+This optional variable can used to add the voucher-code used on the checkout page of your webshop. Voucher codes should be formatted as a string, such as "DISCOUNT10".
 
 #### Merchant description:
-Please add a variable for the description for the order. You can use any order information you might want to see in your TradeTracker account such as product names or categories. If you're unsure of what value to use, please contact your account manager for advice. <em>This description is visible only to you in your TradeTracker.com account for statistical and analytics purposes.</em>
+This optional variable can be used to add your own description to a sale. You can use any order information you might want to see in your TradeTracker account such as product names or categories. If you're unsure of what value to use, please contact your account manager for advice. <em>This description is visible only to you in your TradeTracker.com account for statistical and analytics purposes.</em>
 
 #### Affiliate description:
-Please add a variable for the description for the order. This description is normally the name or category of the products included in the order. If you're unsure of what value to use, please contact your account manager for advice.<em>This description is visible for affiliates only, and  is used by our affiliates for campaign optimisation.</em>"
-
+This optional variable can be used to add a description for affiliates to a sale. This description is normally the name or category of the products included in the order. If you're unsure of what value to use, please contact your account manager for advice. <em>This description is visible for affiliates only, and  is used by our affiliates for campaign optimisation.</em>
 
 
 ### Purchase trigger:
