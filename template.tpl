@@ -104,35 +104,63 @@ ___TEMPLATE_PARAMETERS___
       {
         "type": "LABEL",
         "name": "queries label",
-        "displayName": "Add extra information to your sales tracking"
+        "displayName": "Add extra information to your sales tracking",
+        "enablingConditions": [
+          {
+            "paramName": "tagType",
+            "paramValue": "sale",
+            "type": "EQUALS"
+          }
+        ]
       },
       {
         "type": "TEXT",
         "name": "voucherCode",
         "displayName": "Voucher code",
         "simpleValueType": true,
-        "help": "Please add a variable for the voucher code used on the checkout page of your webshop.\u003c/br\u003e\u003c/br\u003eVoucher codes should be formatted as a string, such as \"DISCOUNT10\"."
+        "help": "Please add a variable for the voucher code used on the checkout page of your webshop.\u003c/br\u003e\u003c/br\u003eVoucher codes should be formatted as a string, such as \"DISCOUNT10\".",
+        "enablingConditions": [
+          {
+            "paramName": "tagType",
+            "paramValue": "sale",
+            "type": "EQUALS"
+          }
+        ]
       },
       {
         "type": "TEXT",
         "name": "descrMerchant",
         "displayName": "Merchant description",
         "simpleValueType": true,
-        "help": "Please add a variable for the description for the order. You can use any order information you might want to see in your TradeTracker account such as product names or categories.\u003c/br\u003e\u003c/br\u003e If you\u0027re unsure of what value to use, please contact your account manager for advice.\u003c/br\u003e\u003c/br\u003e\u003cem\u003eThis description is visible only to you in your TradeTracker.com account for statistical and analytics purposes.\u003c/em\u003e"
+        "help": "Please add a variable for the description for the order. You can use any order information you might want to see in your TradeTracker account such as product names or categories.\u003c/br\u003e\u003c/br\u003e If you\u0027re unsure of what value to use, please contact your account manager for advice.\u003c/br\u003e\u003c/br\u003e\u003cem\u003eThis description is visible only to you in your TradeTracker.com account for statistical and analytics purposes.\u003c/em\u003e",
+        "enablingConditions": [
+          {
+            "paramName": "tagType",
+            "paramValue": "sale",
+            "type": "EQUALS"
+          }
+        ]
       },
       {
         "type": "TEXT",
         "name": "descrAffiliate",
         "displayName": "Affiliate description",
         "simpleValueType": true,
-        "help": "Please add a variable for the description for the order. This description is normally the name or category of the products included in the order.\u003c/br\u003e\u003c/br\u003e If you\u0027re unsure of what value to use, please contact your account manager for advice.\u003c/br\u003e\u003c/br\u003e\u003cem\u003eThis description is visible for affiliates only, and  is used by our affiliates for campaign optimisation.\u003c/em\u003e"
-      }
-    ],
-    "enablingConditions": [
+        "help": "Please add a variable for the description for the order. This description is normally the name or category of the products included in the order.\u003c/br\u003e\u003c/br\u003e If you\u0027re unsure of what value to use, please contact your account manager for advice.\u003c/br\u003e\u003c/br\u003e\u003cem\u003eThis description is visible for affiliates only, and  is used by our affiliates for campaign optimisation.\u003c/em\u003e",
+        "enablingConditions": [
+          {
+            "paramName": "tagType",
+            "paramValue": "sale",
+            "type": "EQUALS"
+          }
+        ]
+      },
       {
-        "paramName": "tagType",
-        "paramValue": "sale",
-        "type": "EQUALS"
+        "type": "TEXT",
+        "name": "hostname",
+        "displayName": "Tracking host",
+        "simpleValueType": true,
+        "help": "This field is optional. Please leave blank by default, unless instructed otherwise by your TradeTracker Account Manager"
       }
     ]
   }
@@ -155,10 +183,19 @@ const currency    = data.hasOwnProperty('currency') ? '' + data.currency : '';
 const voucher     = data.hasOwnProperty('voucherCode') ? '' + data.voucherCode : '';
 const descrMerc   = data.hasOwnProperty('descrMerchant') ? '' + data.descrMerchant : '';
 const descrAffil  = data.hasOwnProperty('descrAffiliate') ? '' + data.descrAffiliate : '';
-const domain      = data.tagType === 'sale' ? 'ts.tradetracker.net' : 'tl.tradetracker.net';
+
+// Set tracking host
+let domain = '';
+let path   = '';
+if (data.hasOwnProperty('hostname') && data.hostname !== undefined) {
+  domain = data.hostname;
+  path   = data.tagType === 'sale' ? 's' : 'l';
+} else {
+  domain = data.tagType === 'sale' ? 'ts.tradetracker.net' : 'tl.tradetracker.net';
+}
 
 // Construct Pixel URL
-let imgUrl = 'https://' + domain + '/?cid=' + encodeUriComponent(campaignID) + '&pid=' + encodeUriComponent(productID) + '&tid=' + encodeUriComponent(orderID);
+let imgUrl = 'https://' + domain + '/' + path + '?cid=' + encodeUriComponent(campaignID) + '&pid=' + encodeUriComponent(productID) + '&tid=' + encodeUriComponent(orderID);
 if (data.tagType === 'sale') {
   imgUrl += '&tam=' + encodeUriComponent(orderAmount);
   imgUrl += '&event=sales&qty=1&currency=' + encodeUriComponent(currency);
@@ -186,15 +223,10 @@ ___WEB_PERMISSIONS___
       },
       "param": [
         {
-          "key": "urls",
+          "key": "allowedUrls",
           "value": {
-            "type": 2,
-            "listItem": [
-              {
-                "type": 1,
-                "string": "https://*.tradetracker.net/*"
-              }
-            ]
+            "type": 1,
+            "string": "any"
           }
         }
       ]
