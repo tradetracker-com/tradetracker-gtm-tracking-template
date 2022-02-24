@@ -2,9 +2,11 @@ homepage: "https://tradetracker.com",
 documentation: "https://github.com/tradetracker-com/tradetracker-gtm-tracking-template/blob/master/Guide_International.pdf",
 versions:
   # Latest version
+  - sha: 40acfeeebb0d3cfa5b08e1986fd7958acec5703f
+    changeNotes: Added new field for custom hosting domain for self-hosted campaigns
+  #Older versions
   - sha: 409a27bb824bce6e2b304350e671e7e0b014ba6b
     changeNotes: Added voucher code and affiliate/merchant description fields  
-  #Older versions
   - sha: 83bdb2aadae0abb394e7676766334434666583d1
     changeNotes: Initial Version
   - sha: 6efe8ebcdae0607d75551d8165ca5223409ca5fd
