@@ -98,7 +98,7 @@ ___TEMPLATE_PARAMETERS___
   {
     "type": "GROUP",
     "name": "extraQueries",
-    "displayName": "Additional Paramters (Optional)",
+    "displayName": "Additional Parameters (Optional)",
     "groupStyle": "ZIPPY_OPEN_ON_PARAM",
     "subParams": [
       {
