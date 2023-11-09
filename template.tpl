@@ -45,6 +45,10 @@ ___TEMPLATE_PARAMETERS___
       {
         "displayValue": "Leads Tag",
         "value": "lead"
+      },
+      {
+        "value": "multi",
+        "displayValue": "Multi Product Group Tag"
       }
     ],
     "displayName": "Tag Type",
@@ -78,8 +82,8 @@ ___TEMPLATE_PARAMETERS___
     "enablingConditions": [
       {
         "paramName": "tagType",
-        "type": "EQUALS",
-        "paramValue": "sale"
+        "type": "NOT_EQUALS",
+        "paramValue": "lead"
       }
     ],
     "displayName": "Transaction Amount",
@@ -94,6 +98,74 @@ ___TEMPLATE_PARAMETERS___
     "simpleValueType": true,
     "help": "Please enter the 3 letter currency code (\"USD\", \"EUR\" etc) for the currency that transactions on your website will be made in.",
     "defaultValue": "EUR"
+  },
+  {
+    "type": "TEXT",
+    "name": "basketItems",
+    "displayName": "Basket Items Array",
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "tagType",
+        "paramValue": "multi",
+        "type": "EQUALS"
+      }
+    ],
+    "help": "Please select the dataLayer variable for the Basket Items in a sale.\u003c/br\u003e\u003c/br\u003e This should be an array of product objects, please refer to our documentation if you\u0027re unsure of which variable to use, or how to create the required variable."
+  },
+  {
+    "type": "SELECT",
+    "name": "basketType",
+    "displayName": "DataLayer Purchase Event Type",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "value": "EE",
+        "displayValue": "Enhanced Ecommerce (Universal Analytics)"
+      },
+      {
+        "value": "GA",
+        "displayValue": "Google Analytics 4"
+      }
+    ],
+    "simpleValueType": true,
+    "defaultValue": "EE",
+    "enablingConditions": [
+      {
+        "paramName": "tagType",
+        "paramValue": "multi",
+        "type": "EQUALS"
+      }
+    ],
+    "help": "This option allows you to choose between the type of purchase event used in your dataLayer. The more common model is Google\u0027s Universal Analytics Enhanced Ecommerce model, however the Google Analytics 4 model is also supported."
+  },
+  {
+    "type": "SIMPLE_TABLE",
+    "name": "productIds",
+    "displayName": "ProductGroup ID",
+    "simpleTableColumns": [
+      {
+        "defaultValue": "",
+        "displayName": "ProductGroup ID",
+        "name": "pid",
+        "type": "TEXT"
+      },
+      {
+        "defaultValue": "",
+        "displayName": "Category Keywords",
+        "name": "categories",
+        "type": "TEXT"
+      }
+    ],
+    "newRowButtonText": "Add Product Group",
+    "help": "Add additional Product Groups by entering a ProductGroup ID in the left column, and a comma-separated list of category keywords for product-categories that should be matched to that product-group. \u003c/br\u003e\u003c/br\u003e  \u003cem\u003e\u003cstrong\u003eExample:\u003c/strong\u003eYou have a product-group for glasses and contacts, you can enter \"glasses, contacts\" as the category keyword.\u003c/em\u003e\u003c/br\u003e\u003c/br\u003e  It is also possible to enter regular expressions as category keywords to make matching more precise. \u003c/br\u003e\u003c/br\u003e  If you need any help setting up the additional Product Group Ids, please refer to our documentation, or contact your Account Manager for assistance.",
+    "enablingConditions": [
+      {
+        "paramName": "tagType",
+        "paramValue": "multi",
+        "type": "EQUALS"
+      }
+    ]
   },
   {
     "type": "GROUP",
@@ -122,8 +194,8 @@ ___TEMPLATE_PARAMETERS___
         "enablingConditions": [
           {
             "paramName": "tagType",
-            "paramValue": "sale",
-            "type": "EQUALS"
+            "paramValue": "lead",
+            "type": "NOT_EQUALS"
           }
         ]
       },
@@ -133,13 +205,7 @@ ___TEMPLATE_PARAMETERS___
         "displayName": "Merchant description",
         "simpleValueType": true,
         "help": "Please add a variable for the description for the order. You can use any order information you might want to see in your TradeTracker account such as product names or categories.\u003c/br\u003e\u003c/br\u003e If you\u0027re unsure of what value to use, please contact your account manager for advice.\u003c/br\u003e\u003c/br\u003e\u003cem\u003eThis description is visible only to you in your TradeTracker.com account for statistical and analytics purposes.\u003c/em\u003e",
-        "enablingConditions": [
-          {
-            "paramName": "tagType",
-            "paramValue": "sale",
-            "type": "EQUALS"
-          }
-        ]
+        "enablingConditions": []
       },
       {
         "type": "TEXT",
@@ -147,13 +213,14 @@ ___TEMPLATE_PARAMETERS___
         "displayName": "Affiliate description",
         "simpleValueType": true,
         "help": "Please add a variable for the description for the order. This description is normally the name or category of the products included in the order.\u003c/br\u003e\u003c/br\u003e If you\u0027re unsure of what value to use, please contact your account manager for advice.\u003c/br\u003e\u003c/br\u003e\u003cem\u003eThis description is visible for affiliates only, and  is used by our affiliates for campaign optimisation.\u003c/em\u003e",
-        "enablingConditions": [
-          {
-            "paramName": "tagType",
-            "paramValue": "sale",
-            "type": "EQUALS"
-          }
-        ]
+        "enablingConditions": []
+      },
+      {
+        "type": "TEXT",
+        "name": "trackingGroupId",
+        "displayName": "Tracking Group Id",
+        "simpleValueType": true,
+        "help": "This field is optional. Please leave blank by default, unless instructed otherwise by your TradeTracker Account Manager"
       },
       {
         "type": "TEXT",
@@ -169,10 +236,60 @@ ___TEMPLATE_PARAMETERS___
 
 ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
-// Permissions
+//// PERMISSIONS ////
 const encodeUriComponent = require('encodeUriComponent');
 const query              = require('queryPermission');
 const sendPixel          = require('sendPixel');
+
+//// HELPER FUNCTIONS ////
+
+// Custom find function as it is missing in templates standard lib
+const find = (array, func) => {
+  for (let i = 0; i < array.length; i++) {
+    if (func(array[i])) return array[i];
+  }
+  return null;
+};
+
+// Test productGroup keywords against product category
+function mapPid(productGroups, category) {
+  for (var pid in productGroups) {
+    var keywords = productGroups[pid];
+    for (var i = 0, len = keywords.length; i < len; i++) {
+      if (category.search(keywords[i].trim().toLowerCase()) != -1) {
+        return pid;
+      }
+    }
+  }
+  return productID;
+}
+
+// Map a basket item as an object with a productId and amount
+function mapProducts(product) {
+  if (basketType === "EE") {
+    // Return basket values for "EE" type of basket
+    return product.map(function (item) {
+      var category = typeof item.category === 'string' ? item.category : item.category.join(">");
+      return {
+        'amount': item.price * item.quantity,
+        'productID': mapPid(productGroups, category.toLowerCase())
+      };
+    });
+  } else {
+    // Return basket values for "GA" type of basket
+    return product.map(function (item) {
+      var category = [item.item_category, item.item_category2, item.item_category3, item.item_category4, item.item_category5].filter(function(item) {
+	  return item != "";
+      }).join(">");
+      return {
+        'amount': item.price * item.quantity,
+        'productID': mapPid(productGroups, category.toLowerCase())
+      };
+    });
+  }
+}
+
+//// TAG LOGIC ////
 
 // Set values from tag config
 const campaignID  = data.hasOwnProperty('campaignID') ? '' + data.campaignID : '';
@@ -183,32 +300,86 @@ const currency    = data.hasOwnProperty('currency') ? '' + data.currency : '';
 const voucher     = data.hasOwnProperty('voucherCode') ? '' + data.voucherCode : '';
 const descrMerc   = data.hasOwnProperty('descrMerchant') ? '' + data.descrMerchant : '';
 const descrAffil  = data.hasOwnProperty('descrAffiliate') ? '' + data.descrAffiliate : '';
+const productIds  = data.hasOwnProperty('productIds') ? data.productIds : [];
+const basketItems = data.hasOwnProperty('basketItems') ? data.basketItems : [];
+const basketType  = data.hasOwnProperty('basketType') ? data.basketType : [];
+const trackGrpId  = data.hasOwnProperty('trackingGroupId') ? data.trackingGroupId : [];
 
 // Set tracking host
 let domain = '';
 let path   = '';
 if (data.hasOwnProperty('hostname') && data.hostname !== undefined) {
   domain = data.hostname;
-  path   = data.tagType === 'sale' ? 's' : 'l';
+  path   = data.tagType === 'lead' ? 'l' : 's';
 } else {
-  domain = data.tagType === 'sale' ? 'ts.tradetracker.net' : 'tl.tradetracker.net';
+  domain = data.tagType === 'lead' ? 'tl.tradetracker.net' : 'ts.tradetracker.net';
 }
 
-// Construct Pixel URL
-let imgUrl = 'https://' + domain + '/' + path + '?cid=' + encodeUriComponent(campaignID) + '&pid=' + encodeUriComponent(productID) + '&tid=' + encodeUriComponent(orderID);
-if (data.tagType === 'sale') {
-  imgUrl += '&tam=' + encodeUriComponent(orderAmount);
-  imgUrl += '&event=sales&qty=1&currency=' + encodeUriComponent(currency);
-  imgUrl += '&vc=' + encodeUriComponent(voucher);
-  imgUrl += '&descrMerchant=' + encodeUriComponent(descrMerc);
+// IF multi-product-group AND vars are set correctly
+if(data.tagType == 'multi' && productIds.length > 0 && basketItems.length > 0) {
+  
+  // Map table of productIds and keywords to an object
+  var productGroups = productIds.reduce(function (map, obj) {
+    map[obj.pid] = obj.categories.split(',');
+    return map;
+  }, {});
+  
+  // Map basket items to productIds and sum totals if multiple items for one productId
+  var basket = mapProducts(basketItems).reduce(function (bskt, item) {
+    let found = find(bskt, x => x.productID === item.productID);
+    if (found) {
+      found.amount += item.amount;
+    }
+    else {
+      bskt.push({ productID: item.productID, amount: item.amount });
+    }
+    return bskt;
+  }, []);
+  
+}
+
+let imgUrl  = '';
+if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefined) {
+  // Loop over basket for multi-product-group tag
+  for (let i = 0; i < basket.length; i++) {
+    let imgUrl = 'https://' + domain + '/' + path;
+    imgUrl += '?cid=' + encodeUriComponent(campaignID);
+    imgUrl += '&pid='  + encodeUriComponent(basket[i].productID);
+    imgUrl += '&tgi='  + encodeUriComponent(trackGrpId);
+    imgUrl += '&tid='  + encodeUriComponent(orderID);
+    imgUrl += '&descrMerchant='  + encodeUriComponent(descrMerc);
+    imgUrl += '&descrAffiliate=' + encodeUriComponent(descrAffil);
+    imgUrl += '&tam='   + encodeUriComponent(basket[i].amount.toString());
+    imgUrl += '&data=&event=sales&qty=1';
+    imgUrl += '&currency=' + encodeUriComponent(currency);
+    imgUrl += '&vc=' + encodeUriComponent(voucher);
+    sendPixel(imgUrl, null, data.gtmOnFailure);
+  }
+  data.gtmOnSuccess();
+} else {
+  // ELSE Construct for regular sales/lead tag
+  imgUrl += 'https://' + domain + '/' + path;
+  imgUrl += '?cid=' + encodeUriComponent(campaignID);
+  imgUrl += '&pid='  + encodeUriComponent(productID);
+  imgUrl += '&tgi='  + encodeUriComponent(trackGrpId);
+  imgUrl += '&tid='  + encodeUriComponent(orderID);
+  imgUrl += '&descrMerchant='  + encodeUriComponent(descrMerc);
   imgUrl += '&descrAffiliate=' + encodeUriComponent(descrAffil);
-} else {
-  imgUrl += '&event=lead';
-}
+  if (data.tagType !== 'lead') {
+    // add sales only queries
+    imgUrl += '&tam=' + encodeUriComponent(orderAmount);
+    imgUrl += '&currency=' + encodeUriComponent(currency);
+    imgUrl += '&vc=' + encodeUriComponent(voucher);
+    imgUrl += '&event=sales&qty=1&data=';
+  } else {
+    // add lead query
+    imgUrl += '&event=lead';
+  }  
 
-// Call data.gtmOnSuccess when the tag is finished.
-if (query('send_pixel', imgUrl)) {
-  sendPixel(imgUrl, data.gtmOnSuccess, data.gtmOnFailure);
+  // pixel success callback
+  if (query('send_pixel', imgUrl)) {
+    sendPixel(imgUrl, data.gtmOnSuccess, data.gtmOnFailure);
+  }
 }
 
 

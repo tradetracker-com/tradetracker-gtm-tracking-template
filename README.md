@@ -1,17 +1,18 @@
 # TradeTracker.com Google Tag Manager Template
 
-This tag template makes it easy for advertisers to add TradeTracker.com's conversion pixel to Google Tag Manager container. This template is now available through Google's [Communinity Template Gallery](https://tagmanager.google.com/gallery/#/owners/tradetracker-com/templates/tradetracker-gtm-tracking-template). If you have any questions or need any assistance with using this template, please contact your Account Manager or email at support@tradetracker.com.
+This tag template makes it easy for advertisers to add TradeTracker.com's conversion pixel to Google Tag Manager container. If you have any questions or need any assistance please contact your Account Manager, or email at support@tradetracker.com.
 
 ### Contents: 
-* [Configuring your tag](#config)
+* [Configuring your Tag](#config)
 * [Before setting up your tag](#preparation)
-  * [Sales tag variables and triggers](#sales)
-  * [Leads tag variables and triggers](#leads)
-* [Other tag types](#other)
+  * [Sales Tag Variables & Triggers](#sales)
+  * [Leads Tag Variables & Triggers](#leads)
+  * [Multi Product-Group Sales Tag Variables and Triggers](#multi)
+* [Other Tag Types](#other)
 
 ----
 
-## <a name="config"></a>Configuring your tag
+## <a name="config"></a>Configuring your Tag
 
 1. Download the the .zip of this repository and extract (unzip) the archive  
 1. Create a new template in Google Tag Manager and import the template.tpl file from the zip using the overflow menu at the top right
@@ -21,29 +22,27 @@ This tag template makes it easy for advertisers to add TradeTracker.com's conver
 1. Add your ProductGroup Id as text or enter the variable name
 1. Enter the variable name for your Transaction  Id variable
 1. Enter the variable name for your Transaction Amount variable ('Sales' tag type only)
-1. Enter the currency code that transactions on your website will be made in
-1. Configure any additional variables for sales tracking ('Sales' tag type only)
 1. Select the correct firing trigger for the tag
 1. Save the tag
 
 
-## <a name="preparation"></a>Before setting up your TradeTracker.com tag
+## <a name="preparation"></a>Before setting up your TradeTracker.com Tag
 
-Make sure you have a **Campaign Id** and **ProductGroup Id** that have been provided by your account manager at TradeTracker.com. You'll need to enter these during the tag configuration.
+Make sure you have a **Campaign Id** and **ProductGroup Id** that have been provided by your Account Manager at TradeTracker.com. You'll need to enter these during the tag configuration.
 
 You'll also need to ensure that you have GTM (Google Tag Manager) Variables configured that capture the data that you want to track, and GTM Triggers to fire the tag on these events. 
 
-## <a name="sales"></a>Sales tag variables & triggers
+## <a name="sales"></a>Sales Tag Variables & Triggers
 If you want to track retail sales from your website you will need to capture the transaction (order) details, and fire this tag on the purchase event. For this we highly recommend using Google's [Enhanced Ecommerce](https://developers.google.com/tag-manager/enhanced-ecommerce#purchases) model for pushing purchase events to the dataLayer. We require these two specific variables:
 
-### Trasaction id:
+### <a name="tran"></a>Trasaction ID:
 This variable should capture the unique Transaction or Order ID for the sale. This should be the same ID that you use to track your sales internally, and it's important that it's unique for every sale. 
 
 In the Enhanced Ecommerce purchase model this variable can be found in the dataLayer at `ecommerce.purchase.actionField.id`. If you need to create new GTM variable for this value, create a new dataLayer type variable, and enter this address in the "Data Layer Variable Name" field.
 
 
-### Transaction amount:
-This variable should capture the total monetary amount for the sale **excluding** any applicable tax such as VAT. It should be formatted as a "string", and should be a dot-decimal number to two decimal places. 
+### Transaction Amount:
+This variable should capture the total monetary amount for the sale (sum of all included items) **excluding** any applicable tax such as VAT. It should be formatted as a "string", and should be a dot-decimal number to two decimal places. 
 
 Examples: 
 ```
@@ -63,24 +62,8 @@ function () {
 }
 ```
 
-### Currency:
-This variable should capture the currency code that your transactions on your website are made in. If this will always be the same you can just type in the three letter [ISO 4217 currency code](https://en.wikipedia.org/wiki/ISO_4217#Active_codes). If it will vary, you may need to create a custom variable that will capture this transaction currency and provide it to the tag.
-
-### Configure additional variables:
-These variables are not required. The tag will work without configuring these fields. However it is recommended that you complete this part of the configuration to ensure that you get the most out of your TradeTracker.com campaigns.
-
-#### Voucher Code:
-This optional variable can used to add the voucher-code used on the checkout page of your webshop. Voucher codes should be formatted as a string, such as "DISCOUNT10".
-
-#### Merchant description:
-This optional variable can be used to add your own description to a sale. You can use any order information you might want to see in your TradeTracker account such as product names or categories. If you're unsure of what value to use, please contact your account manager for advice. <em>This description is visible only to you in your TradeTracker.com account for statistical and analytics purposes.</em>
-
-#### Affiliate description:
-This optional variable can be used to add a description for affiliates to a sale. This description is normally the name or category of the products included in the order. If you're unsure of what value to use, please contact your account manager for advice. <em>This description is visible for affiliates only, and  is used by our affiliates for campaign optimisation.</em>
-
-
-### Purchase trigger:
-This GTM trigger should be set to fire either when a "purchase" event is pushed to the dataLayer, or to match the url of your post-purchase "thank-you" page and fire the tag there. 
+### Purchase Trigger:
+This GTM Trigger should be set to fire either when a "purchase" event is pushed to the dataLayer, or to match the url of your post-purchase "thank-you" page and fire the tag there. 
 
 Firing on the purchase event is a more reliable way to fire the tag, and if you use the Enhanced Ecommerce purchase model you can create a "Custom Event" trigger, and enter `purchase` as the "Event name" to create this trigger.
 
@@ -95,7 +78,7 @@ If you want to track custom leads events such as email signups or demo requests,
 ### Transaction ID: 
 The Leads tag still requires a Transaction Id. In this case the transaction id tracks a unique user event on your website. If this will track something like email signups where an id is returned from the submitted form, you could provide this id so that these leads events can be matched from TradeTracker.com's tracking to your own analytics. 
 
-If you are tracking an event that does not have an provide it's own id, you could create a unique identifier for events by combining a random number and a timestamp in a GTM Custom JavaScript variable. For example:  
+If you are tracking an event that does not have an provide it's own id, you could create a unique identifier for events by combining a random number and a timestamp in a GTM Custom JavaScript variable. For example: 
 
 ```javascript
 function () {
@@ -108,6 +91,66 @@ The trigger for your leads tag will be defined by the type of user event that yo
 
 ----
 
+## <a name="multi"></a>Multi Product-Group Sales Tag Variables and Triggers
+If you run a campaign that makes use of multiple 'product-groups' to assign different commission rates to different types of products, you can select the "Sales - Multi Product Group" option from the Tag Type dropdown menu when configuring your tag. 
+
+In order to support this type of Sales tag you will need to provide the basket items (purchased products) to the dataLayer. For this we highly recommend using Google's Enhanced Ecommerce model for pushing purchase events to the dataLayer. We require these two specific variables, and a list of product-group ids to check for.
+
+### Trasaction ID:
+This is the same Transaction Id that you would use in the normal Sales tag. It should be a unique identifier that you use to track your sales internally. More details can be found under the [Sales Tag section](#trans).
+
+### Default Product-Group ID:
+This should be the default product-group id (provided by your TradeTracker.com Account Manager) that the tag will use if it cannot find a matching product-group for a product's category.
+You can enter this as text in the field, or you could create a GTM "Constant" variable type and enter the name of that variable.
+
+### Basket Items Array:
+In order to use this tag type without customization you will need to use Google's [Enhanced Ecommerce](https://developers.google.com/tag-manager/enhanced-ecommerce#purchases) model for pushing purchase events and related data to the dataLayer. 
+
+Once this is configured, you will need to create a GTM "dataLayer" type variable, and use the dataLayer location `ecommerce.purchase.products`. This will provide the TradeTracker.com tag with the basket items, their prices and categories so that we can fire the tracking tag with the appropriate product-group ids.
+
+If the Enhanced Ecommerce style products array is not available, you can create your own GTM variable to fill this data using the following schema below. It should be an array of objects, and each object needs the keys "price", "quantity" and "category". Any other product specific keys like the product name, EAN or identifier can be dropped. 
+
+```json
+[
+  {
+    "price": 12.34,
+    "quantity": 1,
+    "category": "category / sub-category"
+  },
+  {
+    "price": 98.76,
+    "quantity": 3,
+    "category": "category / sub-category"
+  }
+]
+```
+
+### Basket Items Array:
+This drop down allows you to select a DataLayer model. Either the [Universal Analytics Enhanced Ecommerce Purchase event](https://developers.google.com/analytics/devguides/collection/ua/gtm/enhanced-ecommerce?hl=en#purchases), or the [Google Analytics 4 Purchase event](https://developers.google.com/analytics/devguides/collection/ga4/set-up-ecommerce?hl=en). 
+
+### Additional Product Groups
+This field allows you to add additional product-group ids and the category keywords that should be used to match products to that product-group. 
+
+You can add an additional product-group using the "Add Row" button. Enter the product-group id on the left, and then category keyword(s) in the field on the right. If you need to enter multiple keywords for a single product-group id, you can separate these with a comma. 
+
+For Example:
+```
+Product-Group Id  |  Category Keywords
+--------------------------------------------------
+12345             | Sun Glasses, Eyewear, Contacts
+23456             | Shirts, Sweaters, Jumpers
+34567             | Jeans
+```
+
+It is also possible to use regular expressions in the Category Keywords field. If for example you use the category keyword `glasses`, this will find matches in the categories "Glasses", and "Sunglasses". To make this more strict, you could instead enter the regular expression `^glasses$` to ensure that only "Glasses" is matched with that product-group. 
+
+<em>Matching Category Keywords to Product-Group Ids will require some testing. How you structure your category paths internally will affect how they are pushed to the dataLayer, and how our Tag searches those categories for keywords. If you need any additional information or support on configuring this, please reach out to your Account Manager or contact us using support@tradetracker.com
+
+## <a name="fallback"></a>Sales tag Fallback
+
+In the event that the tag cannot construct a valid basket or list of product groups it will fallback to executing a regular sale pixel call to ensure that the transaction is still recorded.
+
+
 ## <a name="other"></a>Other Tag Types:
-This Google Tag Manager template only supports the most common tracking scenarios for TradeTracker.com marketing campaigns. If you run a more complex performance marketing campaign that makes use of multiple campaigns for different brands, multiple ProductGroups, Exclusive Voucher Codes or needs to support multiple countries, please get in touch with your TradeTracker.com account manager for further support and guidance on how implement our tracking. If you're unsure of how to contact your account manager, please email us at support@tradetracker.com
+This Google Tag Manager template only supports the most common tracking scenarios for TradeTracker.com marketing campaigns. If you run a more complex performance marketing campaign that makes use of multiple campaigns for different brands, Exclusive Voucher Codes or needs to support multiple countries, please get in touch with your TradeTracker.com Account Manager for further support and guidance on how implement our tracking. If you're unsure of how to contact your Account Manager, please email us at support@tradetracker.com
 
