@@ -14,7 +14,8 @@ ___INFO___
   "categories": [
     "AFFILIATE_MARKETING",
     "MARKETING",
-    "ATTRIBUTION"
+    "ATTRIBUTION",
+    "ADVERTISING"
   ],
   "securityGroups": [],
   "id": "cvt_temp_public_id",
