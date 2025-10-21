@@ -348,19 +348,19 @@ if(data.tagType == 'multi' && productIds.length > 0 && basketItems.length > 0) {
   }, []);
 }
 
-let imgUrl  = '';
+let imgUrl = '';
 if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefined) {
   // Loop over basket for multi-product-group tag
   for (let i = 0; i < basket.length; i++) {
     let imgUrl = 'https://' + domain + '/' + path;
     imgUrl += '?cid=' + encodeUriComponent(campaignID);
-    imgUrl += '&pid='  + encodeUriComponent(basket[i].productID);
-    imgUrl += '&tgi='  + encodeUriComponent(trackGrpId);
-    imgUrl += '&tid='  + encodeUriComponent(orderID);
-    imgUrl += '&descrMerchant='  + encodeUriComponent(descrMerc);
+    imgUrl += '&pid=' + encodeUriComponent(basket[i].productID);
+    imgUrl += '&tgi=' + encodeUriComponent(trackGrpId);
+    imgUrl += '&tid=' + encodeUriComponent(orderID);
+    imgUrl += '&descrMerchant=' + encodeUriComponent(descrMerc);
     imgUrl += '&descrAffiliate=' + encodeUriComponent(descrAffil);
-    imgUrl += '&tam='   + encodeUriComponent(basket[i].amount.toString());
-    imgUrl += '&data='  + encodeUriComponent(ttCookieValue || '');
+    imgUrl += '&tam=' + encodeUriComponent(basket[i].amount.toString());
+    imgUrl += '&data=' + (ttCookieValue || '');
     imgUrl += '&event=sales&qty=1';
     imgUrl += '&currency=' + encodeUriComponent(currency);
     imgUrl += '&vc=' + encodeUriComponent(voucher);
@@ -371,10 +371,10 @@ if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefi
   // ELSE Construct for regular sales/lead tag
   imgUrl += 'https://' + domain + '/' + path;
   imgUrl += '?cid=' + encodeUriComponent(campaignID);
-  imgUrl += '&pid='  + encodeUriComponent(productID);
-  imgUrl += '&tgi='  + encodeUriComponent(trackGrpId);
-  imgUrl += '&tid='  + encodeUriComponent(orderID);
-  imgUrl += '&descrMerchant='  + encodeUriComponent(descrMerc);
+  imgUrl += '&pid=' + encodeUriComponent(productID);
+  imgUrl += '&tgi=' + encodeUriComponent(trackGrpId);
+  imgUrl += '&tid=' + encodeUriComponent(orderID);
+  imgUrl += '&descrMerchant=' + encodeUriComponent(descrMerc);
   imgUrl += '&descrAffiliate=' + encodeUriComponent(descrAffil);
   if (data.tagType !== 'lead') {
     // add sales only queries
@@ -382,11 +382,11 @@ if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefi
     imgUrl += '&currency=' + encodeUriComponent(currency);
     imgUrl += '&vc=' + encodeUriComponent(voucher);
     imgUrl += '&event=sales&qty=1';
-    imgUrl += '&data=' + encodeUriComponent(ttCookieValue || '');
+    imgUrl += '&data=' + (ttCookieValue || '');
   } else {
     // add lead query
     imgUrl += '&event=lead';
-  }  
+  }
 
   // pixel success callback
   if (query('send_pixel', imgUrl)) {
