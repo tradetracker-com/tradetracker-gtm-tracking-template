@@ -2,9 +2,11 @@ homepage: "https://tradetracker.com",
 documentation: "https://github.com/tradetracker-com/tradetracker-gtm-tracking-template/blob/master/Guide_International.pdf",
 versions:
   # Latest version
+  - sha: 13e7a1a49b7ddc17cf3148467d9f0453abd696b4
+    changeNotes: Added TT2 support.
+  #Older versions
   - sha: 1259e2b6ad1a9fb3592d20c0cea9be7600c2b192
     changeNotes: Added new field for Tracking Group Id. Merged changes from "Multi Product Group" fork.
-  #Older versions
   - sha: 40acfeeebb0d3cfa5b08e1986fd7958acec5703f
     changeNotes: Added new field for custom hosting domain for self-hosted campaigns
   - sha: 409a27bb824bce6e2b304350e671e7e0b014ba6b
