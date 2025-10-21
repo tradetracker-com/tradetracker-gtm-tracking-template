@@ -14,7 +14,8 @@ ___INFO___
   "categories": [
     "AFFILIATE_MARKETING",
     "MARKETING",
-    "ATTRIBUTION"
+    "ATTRIBUTION",
+    "ADVERTISING"
   ],
   "securityGroups": [],
   "id": "cvt_temp_public_id",
@@ -240,6 +241,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const encodeUriComponent = require('encodeUriComponent');
 const query              = require('queryPermission');
 const sendPixel          = require('sendPixel');
+const getCookieValues    = require('getCookieValues');
 
 //// HELPER FUNCTIONS ////
 
@@ -315,6 +317,15 @@ if (data.hasOwnProperty('hostname') && data.hostname !== undefined) {
   domain = data.tagType === 'lead' ? 'tl.tradetracker.net' : 'ts.tradetracker.net';
 }
 
+// --- Get TT2 cookie value for this campaign ---
+let ttCookieValue = '';
+if (campaignID) {
+  const cookies = getCookieValues('TT2_' + campaignID);
+  if (cookies && cookies.length > 0) {
+    ttCookieValue = cookies[0];
+  }
+}
+
 // IF multi-product-group AND vars are set correctly
 if(data.tagType == 'multi' && productIds.length > 0 && basketItems.length > 0) {
   
@@ -335,22 +346,22 @@ if(data.tagType == 'multi' && productIds.length > 0 && basketItems.length > 0) {
     }
     return bskt;
   }, []);
-  
 }
 
-let imgUrl  = '';
+let imgUrl = '';
 if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefined) {
   // Loop over basket for multi-product-group tag
   for (let i = 0; i < basket.length; i++) {
     let imgUrl = 'https://' + domain + '/' + path;
     imgUrl += '?cid=' + encodeUriComponent(campaignID);
-    imgUrl += '&pid='  + encodeUriComponent(basket[i].productID);
-    imgUrl += '&tgi='  + encodeUriComponent(trackGrpId);
-    imgUrl += '&tid='  + encodeUriComponent(orderID);
-    imgUrl += '&descrMerchant='  + encodeUriComponent(descrMerc);
+    imgUrl += '&pid=' + encodeUriComponent(basket[i].productID);
+    imgUrl += '&tgi=' + encodeUriComponent(trackGrpId);
+    imgUrl += '&tid=' + encodeUriComponent(orderID);
+    imgUrl += '&descrMerchant=' + encodeUriComponent(descrMerc);
     imgUrl += '&descrAffiliate=' + encodeUriComponent(descrAffil);
-    imgUrl += '&tam='   + encodeUriComponent(basket[i].amount.toString());
-    imgUrl += '&data=&event=sales&qty=1';
+    imgUrl += '&tam=' + encodeUriComponent(basket[i].amount.toString());
+    imgUrl += '&data=' + (ttCookieValue || '');
+    imgUrl += '&event=sales&qty=1';
     imgUrl += '&currency=' + encodeUriComponent(currency);
     imgUrl += '&vc=' + encodeUriComponent(voucher);
     sendPixel(imgUrl, null, data.gtmOnFailure);
@@ -360,21 +371,22 @@ if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefi
   // ELSE Construct for regular sales/lead tag
   imgUrl += 'https://' + domain + '/' + path;
   imgUrl += '?cid=' + encodeUriComponent(campaignID);
-  imgUrl += '&pid='  + encodeUriComponent(productID);
-  imgUrl += '&tgi='  + encodeUriComponent(trackGrpId);
-  imgUrl += '&tid='  + encodeUriComponent(orderID);
-  imgUrl += '&descrMerchant='  + encodeUriComponent(descrMerc);
+  imgUrl += '&pid=' + encodeUriComponent(productID);
+  imgUrl += '&tgi=' + encodeUriComponent(trackGrpId);
+  imgUrl += '&tid=' + encodeUriComponent(orderID);
+  imgUrl += '&descrMerchant=' + encodeUriComponent(descrMerc);
   imgUrl += '&descrAffiliate=' + encodeUriComponent(descrAffil);
   if (data.tagType !== 'lead') {
     // add sales only queries
     imgUrl += '&tam=' + encodeUriComponent(orderAmount);
     imgUrl += '&currency=' + encodeUriComponent(currency);
     imgUrl += '&vc=' + encodeUriComponent(voucher);
-    imgUrl += '&event=sales&qty=1&data=';
+    imgUrl += '&event=sales&qty=1';
+    imgUrl += '&data=' + (ttCookieValue || '');
   } else {
     // add lead query
     imgUrl += '&event=lead';
-  }  
+  }
 
   // pixel success callback
   if (query('send_pixel', imgUrl)) {
@@ -404,6 +416,24 @@ ___WEB_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "get_cookies",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "cookieAccess",
+          "value": {
+            "type": 1,
+            "string": "any"
+          }
+        }
+      ]
     },
     "isRequired": true
   }
