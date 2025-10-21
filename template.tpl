@@ -240,6 +240,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const encodeUriComponent = require('encodeUriComponent');
 const query              = require('queryPermission');
 const sendPixel          = require('sendPixel');
+const getCookieValues    = require('getCookieValues');
 
 //// HELPER FUNCTIONS ////
 
@@ -315,6 +316,15 @@ if (data.hasOwnProperty('hostname') && data.hostname !== undefined) {
   domain = data.tagType === 'lead' ? 'tl.tradetracker.net' : 'ts.tradetracker.net';
 }
 
+// --- Get TT2 cookie value for this campaign ---
+let ttCookieValue = '';
+if (campaignID) {
+  const cookies = getCookieValues('TT2_' + campaignID);
+  if (cookies && cookies.length > 0) {
+    ttCookieValue = cookies[0];
+  }
+}
+
 // IF multi-product-group AND vars are set correctly
 if(data.tagType == 'multi' && productIds.length > 0 && basketItems.length > 0) {
   
@@ -335,7 +345,6 @@ if(data.tagType == 'multi' && productIds.length > 0 && basketItems.length > 0) {
     }
     return bskt;
   }, []);
-  
 }
 
 let imgUrl  = '';
@@ -350,7 +359,8 @@ if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefi
     imgUrl += '&descrMerchant='  + encodeUriComponent(descrMerc);
     imgUrl += '&descrAffiliate=' + encodeUriComponent(descrAffil);
     imgUrl += '&tam='   + encodeUriComponent(basket[i].amount.toString());
-    imgUrl += '&data=&event=sales&qty=1';
+    imgUrl += '&data='  + encodeUriComponent(ttCookieValue || '');
+    imgUrl += '&event=sales&qty=1';
     imgUrl += '&currency=' + encodeUriComponent(currency);
     imgUrl += '&vc=' + encodeUriComponent(voucher);
     sendPixel(imgUrl, null, data.gtmOnFailure);
@@ -370,7 +380,8 @@ if (data.tagType === 'multi' && basket !== undefined && productGroups !== undefi
     imgUrl += '&tam=' + encodeUriComponent(orderAmount);
     imgUrl += '&currency=' + encodeUriComponent(currency);
     imgUrl += '&vc=' + encodeUriComponent(voucher);
-    imgUrl += '&event=sales&qty=1&data=';
+    imgUrl += '&event=sales&qty=1';
+    imgUrl += '&data=' + encodeUriComponent(ttCookieValue || '');
   } else {
     // add lead query
     imgUrl += '&event=lead';
@@ -404,6 +415,24 @@ ___WEB_PERMISSIONS___
     },
     "clientAnnotations": {
       "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "get_cookies",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "cookieAccess",
+          "value": {
+            "type": 1,
+            "string": "any"
+          }
+        }
+      ]
     },
     "isRequired": true
   }
