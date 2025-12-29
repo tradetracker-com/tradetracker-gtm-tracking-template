@@ -104,11 +104,16 @@ This should be the default product-group id (provided by your TradeTracker.com A
 You can enter this as text in the field, or you could create a GTM "Constant" variable type and enter the name of that variable.
 
 ### Basket Items Array:
-In order to use this tag type without customization you will need to use Google's [Enhanced Ecommerce](https://developers.google.com/tag-manager/enhanced-ecommerce#purchases) model for pushing purchase events and related data to the dataLayer. 
+To use this tag type without additional customization, your purchase events must be pushed to the `dataLayer` using the Google Analytics 4 ecommerce model.
 
-Once this is configured, you will need to create a GTM "dataLayer" type variable, and use the dataLayer location `ecommerce.purchase.products`. This will provide the TradeTracker.com tag with the basket items, their prices and categories so that we can fire the tracking tag with the appropriate product-group ids.
+The TradeTracker.com tag expects basket data to be provided via the GA4 `items` array, which is part of the `purchase` event structure as defined in the official GA4 ecommerce specification:
+https://developers.google.com/analytics/devguides/collection/ga4/set-up-ecommerce
 
-If the Enhanced Ecommerce style products array is not available, you can create your own GTM variable to fill this data using the following schema below. It should be an array of objects, and each object needs the keys "price", "quantity" and "category". Any other product specific keys like the product name, EAN or identifier can be dropped. 
+To configure this, create a GTM variable of type **Data Layer Variable** and point it to the `ecommerce.items` location.  
+This array is used to extract basket items, prices, quantities, and categories in order to resolve the correct product-group IDs and fire the tracking tag accurately.
+
+If the standard GA4 `items` array is not available, you may provide a custom GTM variable that returns an array of objects using the schema below.  
+Each object must include the keys `price`, `quantity`, and `category`. Any additional product attributes (such as product name, EAN, or internal identifiers) are not required and can be omitted.
 
 ```json
 [
@@ -125,8 +130,9 @@ If the Enhanced Ecommerce style products array is not available, you can create 
 ]
 ```
 
-### Basket Items Array:
-This drop down allows you to select a DataLayer model. Either the [Universal Analytics Enhanced Ecommerce Purchase event](https://developers.google.com/analytics/devguides/collection/ua/gtm/enhanced-ecommerce?hl=en#purchases), or the [Google Analytics 4 Purchase event](https://developers.google.com/analytics/devguides/collection/ga4/set-up-ecommerce?hl=en). 
+### Basket Items Array (Data Layer Model):
+This dropdown allows you to select the Data Layer model used for basket item extraction.
+Only the Google Analytics 4 purchase event model is supported.
 
 ### Additional Product Groups
 This field allows you to add additional product-group ids and the category keywords that should be used to match products to that product-group. 
